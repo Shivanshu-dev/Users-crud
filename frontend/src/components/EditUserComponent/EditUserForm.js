@@ -5,25 +5,34 @@ import { Button, Form } from "react-bootstrap";
 import { updateOneUser } from "../../actions/userActions";
 
 const EditUserForm = ({ singleData }) => {
+  const { users } = singleData;
+
   const dispatch = useDispatch();
   const history = useHistory();
   const params = useParams().userID;
 
-  let username = singleData[0]?.username;
-  let email = singleData[0]?.email;
-  let age = singleData[0]?.age;
+  let [username, setUserName] = useState("");
+  let [email, setEmail] = useState("");
+  let [age, setAge] = useState("");
 
   let handleName = (e) => {
-    username = e;
+    setUserName(e);
   };
 
   let handleEmail = (e) => {
-    email = e;
+    setEmail(e);
   };
 
   let handleAge = (e) => {
-    age = e;
+    setAge(e);
   };
+
+  useEffect(() => {
+    console.log(users);
+    setUserName(users.length === 0 ? "" : users[0]?.username);
+    setEmail(users.length === 0 ? "" : users[0]?.email);
+    setAge(users.length === 0 ? "" : users[0]?.age);
+  }, [users]);
 
   const userUpdatedData = useSelector((state) => state.users);
   const { message, success } = userUpdatedData;
@@ -43,14 +52,14 @@ const EditUserForm = ({ singleData }) => {
 
   return (
     <>
-      {singleData.length === 0 ? (
-        <p>Loading...</p>
+      {users.length === 0 ? (
+        <p>Loading...There is no data</p>
       ) : (
         <Form onSubmit={handleEditUser}>
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>User name</Form.Label>
             <Form.Control
-              defaultValue={singleData[0]?.username}
+              value={username}
               onChange={(e) => handleName(e.target.value)}
               type="text"
               placeholder="Enter user name"
@@ -60,7 +69,7 @@ const EditUserForm = ({ singleData }) => {
           <Form.Group className="mb-3" controlId="formBasicEMail">
             <Form.Label>Email</Form.Label>
             <Form.Control
-              defaultValue={singleData[0]?.email}
+              value={email}
               onChange={(e) => handleEmail(e.target.value)}
               type="email"
               placeholder="Enter User Email"
@@ -70,7 +79,7 @@ const EditUserForm = ({ singleData }) => {
           <Form.Group className="mb-3" controlId="formBasicText">
             <Form.Label>Age</Form.Label>
             <Form.Control
-              defaultValue={singleData[0]?.age}
+              value={age}
               onChange={(e) => handleAge(e.target.value.replace(/\D/, ""))}
               type="text"
               placeholder="Enter User Age"

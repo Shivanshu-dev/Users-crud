@@ -14,6 +14,8 @@ const EditUser = () => {
   const singleUser = useSelector((state) => state.users);
   const { users } = singleUser;
 
+  // console.log(singleUser);
+
   useEffect(() => {
     dispatch(fetchOneUser(param));
   }, [dispatch, param]);
@@ -26,7 +28,7 @@ const EditUser = () => {
       >
         <Row>
           <Suspense fallback={<p>Loading...</p>}>
-            <EditUserForm singleData={users} />
+            <EditUserForm singleData={singleUser} />
           </Suspense>
         </Row>
       </Container>
